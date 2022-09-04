@@ -23,7 +23,41 @@ static Rep rep(Deq q) {
   return (Rep)q;
 }
 
-static void put(Rep r, End e, Data d) {}
+static void put(Rep r, End e, Data d) {
+if(e==Head){
+  //allocate node
+  Node new_node=deq_new();
+  //put in data
+  new_node->data=d;
+  //make next of new node as head and previous null
+  new_node->np[Tail] = r->ht[Head];
+  new_node->np[Head] = 0;
+  //change prev of head node to new node
+  if((r->ht[Head])!=0) (r->ht[Head])->np[Head]=new_node;
+  //move the head to point to the new node
+  r->ht[Head] = new_node;
+//  free(r);
+} else if(e==Tail){
+  //allocate node
+  Node new_node = deq_new();
+  
+  new_node->data=d;
+
+  new_node->np[Tail]=0;
+  new_node->np[Head]=0;
+
+  if(r->ht[Head] == 0){
+    new_node->np[Head] = new_node;
+    new_node->np[Tail]= new_node;
+  } else {
+      (new_node->np[Tail])->np[Head] = new_node;
+      new_node->np[Head]=new_node->np[Tail];
+      new_node->np[Tail]=new_node;
+  }
+
+}
+
+}
 static Data ith(Rep r, End e, int i) { return 0; }
 static Data get(Rep r, End e) { return 0; }
 static Data rem(Rep r, End e, Data d) { return 0; }
