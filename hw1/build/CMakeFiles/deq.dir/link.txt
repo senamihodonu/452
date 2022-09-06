@@ -1,0 +1,2 @@
+/usr/bin/ar qc libdeq.a CMakeFiles/deq.dir/deq.c.o
+/usr/bin/ranlib libdeq.a

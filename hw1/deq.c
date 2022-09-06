@@ -23,6 +23,8 @@ static Rep rep(Deq q) {
   return (Rep)q;
 }
 
+
+/*Appends a new node onto an end*/
 static void put(Rep r, End e, Data d) {
 if(e==Head){
   //allocate node
@@ -36,29 +38,83 @@ if(e==Head){
   if((r->ht[Head])!=0) (r->ht[Head])->np[Head]=new_node;
   //move the head to point to the new node
   r->ht[Head] = new_node;
-//  free(r);
+  //increment list size
+  r->len=r->len+1;
 } else if(e==Tail){
   //allocate node
   Node new_node = deq_new();
-  
+  //create and last node
+  Node last_node = r->ht[Head];
+  //put data in new node
   new_node->data=d;
-
+  //the next for the item inserted at the
+  //end would be null
   new_node->np[Tail]=0;
-  new_node->np[Head]=0;
+  //if list is empty, the inserted node 
+  //is th head
+  if((r->ht[Head])==0) {
+    new_node->np[Head] = 0;
+    r->ht[Head]=new_node;
+    return;
+  }
+  //traverse till the last node
+  while(last_node->np[Tail] != 0){
+    last_node=last_node->np[Tail];
+  }
+  //the last node becomes the new node
+  last_node->np[Tail]=new_node;
+  //the last node is the previous of the
+  //node indserted at the end
+  new_node->np[Head] = last_node;
+  //increment list size
+  r->len=r->len+1;
+}
+}
 
-  if(r->ht[Head] == 0){
-    new_node->np[Head] = new_node;
-    new_node->np[Tail]= new_node;
-  } else {
-      (new_node->np[Tail])->np[Head] = new_node;
-      new_node->np[Head]=new_node->np[Tail];
-      new_node->np[Tail]=new_node;
+/*Takes a node reference, starting direction and an
+index and return by 0-base index, len unchanged*/
+static Data ith(Rep r, End e, int i) { 
+  int counter = 0;
+  Node curr = r->ht[Head];
+
+
+  if(i >= r->len){
+    printf("Index out of bounds exception: Index: %d, Size: %d\n", i, r->len);
+    ERROR("IndexOutOfBoundsException");
   }
 
+  //if list is empty, return error message
+  if(r->ht[Head]==0){
+    ERROR("empty list");
+  }
+
+  if(e==Head){
+  //if i = 0, return the head of the list
+  if(i==0){
+    return (r->ht[Head])->data;
+  } else {
+    while(curr != 0){
+      if(counter == i){
+        return (curr->data);
+      }
+      counter++;
+      curr = curr->np[Tail];
+    }
+  }
+} else if(e==Tail){
+    while(curr != 0){
+        if(counter == (r->len)-i-1){
+          return (curr->data);
+        }
+        counter++;
+        curr = curr->np[Tail];
+      }
 }
 
+  return 0; 
 }
-static Data ith(Rep r, End e, int i) { return 0; }
+
+
 static Data get(Rep r, End e) { return 0; }
 static Data rem(Rep r, End e, Data d) { return 0; }
 
