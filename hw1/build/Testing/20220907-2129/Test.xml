@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Site BuildName="(empty)"
-	BuildStamp="20220906-0539-Experimental"
+	BuildStamp="20220907-2129-Experimental"
 	Name="(empty)"
 	Generator="ctest-3.22.1"
 	CompilerName=""
@@ -24,19 +24,25 @@
 	ProcessorClockFrequency="2304.01"
 	>
 	<Testing>
-		<StartDateTime>Sep 06 13:18 MDT</StartDateTime>
-		<StartTestTime>1662491925</StartTestTime>
+		<StartDateTime>Sep 07 15:35 MDT</StartDateTime>
+		<StartTestTime>1662586505</StartTestTime>
 		<TestList>
 			<Test>./tests/deq_tests</Test>
 		</TestList>
-		<Test Status="passed">
+		<Test Status="failed">
 			<Name>deq_tests</Name>
 			<Path>./tests</Path>
 			<FullName>./tests/deq_tests</FullName>
 			<FullCommandLine>/root/453-OperatingSystems/hw1/build/tests/deq_tests</FullCommandLine>
 			<Results>
+				<NamedMeasurement type="text/string" name="Exit Code">
+					<Value>Failed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Exit Value">
+					<Value>1</Value>
+				</NamedMeasurement>
 				<NamedMeasurement type="numeric/double" name="Execution Time">
-					<Value>0.0037791</Value>
+					<Value>0.0019324</Value>
 				</NamedMeasurement>
 				<NamedMeasurement type="numeric/double" name="Processors">
 					<Value>1</Value>
@@ -51,12 +57,12 @@
 					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
 				</NamedMeasurement>
 				<Measurement>
-					<Value encoding="base64" compression="gzip">eJyNUU1PhEAMvfMrelwOgJvVowcTjQcT10A8ETIZocIkQwdnimT99TLLhizuR3ynTt/ra6dNeyJFNbRS0SqET2taSKwxnNzebaJth1byyGc7x9i6pBnWSW1MrZHR8XHobJnUPhLeKi7LIL+fUUB66LMBr3FTo/X+Aa5XjHGQRzMKeNbmQ+qJR/pW1lCLNGqRo777I16YVvgV5JC+v8IehU/EihQrqdUPCmw73gmtHI+yCduXazJY3UDrwlNTT4pBcSMMjQUa/YSnpmdlF00VObQs2IgGZXVuxGN+trm2jkkEbFjqMPjfnhmljSoz0PKMF88HVlK8bDSO/vaQZU+P/muHwjj4Bc1yxg0=</Value>
+					<Value encoding="base64" compression="gzip">eJyFUctqwzAQvPsr9phAE8c0hWLopVBKKdTg0FMIwrU3tkBaudK6Sfr1leIQ3ObROa12ZmdWUt4RSapBF5JGY1hboyG2xnA8v7udZC3agj2/2DlG7eJmk8S1MbVCRsfD0tkyrkMlgtW0LKPlwxEryA85cwga1wcl+wO4TjJOo+XkiBU8K/NRqJ5H+pLWkEbyWuRJ1/4R/zKt8DNaQv7+BnusQmMqSbIslPxGgbrlnVDSsZf1yF6vyWA0A+3Gp6aBFBvJjTDkBxSGDU9Nz8oumkpyaFmwEQ0W1bkVh/xlGx/HaHUfPLjzP58bZsv0PkkBrTU2hReqcJt1nK0fTUeVe9qW2LI0dKBSmN3Awr+YL6LoB9mfwO8=</Value>
 				</Measurement>
 			</Results>
 		</Test>
-		<EndDateTime>Sep 06 13:18 MDT</EndDateTime>
-		<EndTestTime>1662491925</EndTestTime>
+		<EndDateTime>Sep 07 15:35 MDT</EndDateTime>
+		<EndTestTime>1662586505</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

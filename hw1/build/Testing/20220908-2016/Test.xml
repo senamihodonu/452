@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Site BuildName="(empty)"
-	BuildStamp="20220906-0539-Experimental"
+	BuildStamp="20220908-2016-Experimental"
 	Name="(empty)"
 	Generator="ctest-3.22.1"
 	CompilerName=""
@@ -24,8 +24,8 @@
 	ProcessorClockFrequency="2304.01"
 	>
 	<Testing>
-		<StartDateTime>Sep 06 13:18 MDT</StartDateTime>
-		<StartTestTime>1662491925</StartTestTime>
+		<StartDateTime>Sep 08 14:16 MDT</StartDateTime>
+		<StartTestTime>1662668200</StartTestTime>
 		<TestList>
 			<Test>./tests/deq_tests</Test>
 		</TestList>
@@ -36,7 +36,7 @@
 			<FullCommandLine>/root/453-OperatingSystems/hw1/build/tests/deq_tests</FullCommandLine>
 			<Results>
 				<NamedMeasurement type="numeric/double" name="Execution Time">
-					<Value>0.0037791</Value>
+					<Value>0.0021143</Value>
 				</NamedMeasurement>
 				<NamedMeasurement type="numeric/double" name="Processors">
 					<Value>1</Value>
@@ -55,8 +55,8 @@
 				</Measurement>
 			</Results>
 		</Test>
-		<EndDateTime>Sep 06 13:18 MDT</EndDateTime>
-		<EndTestTime>1662491925</EndTestTime>
+		<EndDateTime>Sep 08 14:16 MDT</EndDateTime>
+		<EndTestTime>1662668200</EndTestTime>
 		<ElapsedMinutes>0</ElapsedMinutes>
 	</Testing>
 </Site>

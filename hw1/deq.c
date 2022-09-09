@@ -74,21 +74,12 @@ if(e==Head){
 /*Takes a node reference, starting direction and an
 index and return by 0-base index, len unchanged*/
 static Data ith(Rep r, End e, int i) { 
+  if(e==Head){
   int counter = 0;
   Node curr = r->ht[Head];
-
-
   if(i >= r->len){
-    printf("Index out of bounds exception: Index: %d, Size: %d\n", i, r->len);
-    ERROR("IndexOutOfBoundsException");
+    ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
   }
-
-  //if list is empty, return error message
-  if(r->ht[Head]==0){
-    ERROR("empty list");
-  }
-
-  if(e==Head){
   //if i = 0, return the head of the list
   if(i==0){
     return (r->ht[Head])->data;
@@ -102,6 +93,11 @@ static Data ith(Rep r, End e, int i) {
     }
   }
 } else if(e==Tail){
+  int counter = 0;
+  Node curr = r->ht[Head];
+  if(i >= r->len){
+    ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
+  }
     while(curr != 0){
         if(counter == (r->len)-i-1){
           return (curr->data);
@@ -114,9 +110,71 @@ static Data ith(Rep r, End e, int i) {
   return 0; 
 }
 
+/*get: return from an end, len--*/
+static Data get(Rep r, End e) { 
+  Data d = 0;
+  if(e==Head){
+    //if the head node is null
+    //list is empty
+    if(r->ht[Head] == 0){
+      ERROR("empty list");
+    }
+    //current node
+    Node head_node = r->ht[Head];
+    //save the data before the node is deleted
+    d = head_node->data;
+    //unlink the head node
+    r->ht[Head] = (r->ht[Head])->np[Tail];
+    //free the head node
+    free(head_node);
+    //decrement list size
+    r->len=r->len-1;
 
-static Data get(Rep r, End e) { return 0; }
-static Data rem(Rep r, End e, Data d) { return 0; }
+  } else if(e==Tail){
+    if(r->ht[Head] != 0){
+      if(r->ht[Head] == 0){
+        r->ht[Head] = 0;
+      } else {
+        Node temp = r->ht[Head];
+          //traverse till the last node
+        while(temp->np[Tail]->np[Tail] != 0){
+          temp=temp->np[Tail];
+        }
+
+        //unlink the tail node
+        Node last_node = temp->np[Tail];
+        temp->np[Tail] = 0;
+        d = last_node->data;
+        free(last_node);
+        r->len=r->len-1;
+      }
+    }
+  }
+  return d; 
+}
+
+/*rem: return by == comparing, len-- (iff found)*/
+static Data rem(Rep r, End e, Data d) { 
+  if(r->ht[Head] == 0){
+    ERROR("empty list");
+  }
+
+  Node curr = r->ht[Head];
+  Node next;
+  while(curr->np[Tail] != 0){
+    if(curr->data == d){
+        next = curr->np[Tail]; 
+        free(curr);
+        curr = next;
+    } else {
+      curr = curr->np[Tail];
+    }
+  }
+
+
+
+
+  return 0; }
 
 extern Deq deq_new() {
   Rep r=(Rep)malloc(sizeof(*r));

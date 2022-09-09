@@ -1,33 +1,31 @@
-Start testing: Sep 06 13:18 MDT
+Start testing: Sep 07 15:35 MDT
 ----------------------------------------------------------
 1/1 Testing: deq_tests
 1/1 Test: deq_tests
 Command: "/root/453-OperatingSystems/hw1/build/tests/deq_tests"
 Directory: /root/453-OperatingSystems/hw1/build/tests
-"deq_tests" start time: Sep 06 13:18 MDT
+"deq_tests" start time: Sep 07 15:35 MDT
 Output:
 ----------------------------------------------------------
 Running main() from /root/453-OperatingSystems/hw1/googletest/googletest/src/gtest_main.cc
-[==========] Running 3 tests from 1 test suite.
+[==========] Running 4 tests from 1 test suite.
 [----------] Global test environment set-up.
-[----------] 3 tests from deq
+[----------] 4 tests from deq
 [ RUN      ] deq.initialize_empty_list
 [       OK ] deq.initialize_empty_list (0 ms)
 [ RUN      ] deq.list_with_one_element
 [       OK ] deq.list_with_one_element (0 ms)
 [ RUN      ] deq.insert_to_head
 [       OK ] deq.insert_to_head (0 ms)
-[----------] 3 tests from deq (0 ms total)
+[ RUN      ] deq.ith_term_with_empty_list
+/root/453-OperatingSystems/hw1/deq.c:81: error: IndexOutOfBoundsException: Index: 0, Size: 0
 
-[----------] Global test environment tear-down
-[==========] 3 tests from 1 test suite ran. (0 ms total)
-[  PASSED  ] 3 tests.
 <end of output>
 Test time =   0.00 sec
 ----------------------------------------------------------
-Test Passed.
-"deq_tests" end time: Sep 06 13:18 MDT
+Test Failed.
+"deq_tests" end time: Sep 07 15:35 MDT
 "deq_tests" time elapsed: 00:00:00
 ----------------------------------------------------------
 
-End testing: Sep 06 13:18 MDT
+End testing: Sep 07 15:35 MDT
