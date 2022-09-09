@@ -74,39 +74,34 @@ if(e==Head){
 /*Takes a node reference, starting direction and an
 index and return by 0-base index, len unchanged*/
 static Data ith(Rep r, End e, int i) { 
+
+  int counter = 0;
+  Node curr = r->ht[Head];
+  if(i >= r->len){
+    ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
+  }
   if(e==Head){
-  int counter = 0;
-  Node curr = r->ht[Head];
-  if(i >= r->len){
-    ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
-  }
-  //if i = 0, return the head of the list
-  if(i==0){
-    return (r->ht[Head])->data;
-  } else {
-    while(curr != 0){
-      if(counter == i){
-        return (curr->data);
-      }
-      counter++;
-      curr = curr->np[Tail];
-    }
-  }
-} else if(e==Tail){
-  int counter = 0;
-  Node curr = r->ht[Head];
-  if(i >= r->len){
-    ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
-  }
-    while(curr != 0){
-        if(counter == (r->len)-i-1){
+    //if i = 0, return the head of the list
+    if(i==0){
+      return (r->ht[Head])->data;
+    } else {
+      while(curr != 0){
+        if(counter == i){
           return (curr->data);
         }
         counter++;
         curr = curr->np[Tail];
       }
-}
-
+    }
+  } else if(e==Tail){
+      while(curr != 0){
+          if(counter == (r->len)-i-1){
+            return (curr->data);
+          }
+          counter++;
+          curr = curr->np[Tail];
+        }
+  }
   return 0; 
 }
 
