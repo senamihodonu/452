@@ -3,16 +3,13 @@
 #include <string.h>
 
 #include "deq.h"
-/**
- * @brief 
- * 
- */
+
 //0///////////////////////////////////////////////////////
 /*Testing the deq_head_put(Deq q, Data d) 
 function with 1 element(s) to the list
 from the head direction*/
 double test0_deq_head_put_1_elements(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("0 - Testing deq_head_put(Deq q, Data d)\n");
   printf("w/ 1 element\n");
   printf("----------------------------------\n");
@@ -47,7 +44,7 @@ double test0_deq_head_put_1_elements(Deq q) {
 function by adding 2 elements to the list
 from the head direction*/
 double test1_deq_head_put_2_elements(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("1 - Testing deq_head_put(Deq q, Data d) \n");
   printf("w/ 2 element\n");
   printf("----------------------------------\n");
@@ -55,24 +52,28 @@ double test1_deq_head_put_2_elements(Deq q) {
   q = deq_new();
   //List before adding 2 element
   char *s=deq_str(q,0);
-  printf("list before operation --> [ %s ]\n",s);
+  printf("before operation --> [ %s ]\n",s);
   free(s);
 
   //adding 2 elements to list
   deq_head_put(q, "1");
+  char *r1=deq_str(q,0);
+  printf("after first insert --> [ %s ]\n",r1);
   deq_head_put(q, "2");
-  char *result=deq_str(q,0);
-  printf("list after operation --> [ %s ]\n",result);
+  char *r2=deq_str(q,0);
+  printf("after second insert --> [ %s ]\n",r2);
 
   //comparing the expected with the result
-  if(strcmp(result,expected)==0){
+  if(strcmp(r2,expected)==0){
     fprintf(stderr, "Pass!\n");
-    free(result);
+    free(r1);
+    free(r2);
     deq_del(q,0);
     return 1;
   } else{
     fprintf(stderr, "Fail!\n");
-    free(result);
+    free(r1);
+    free(r2);
     deq_del(q,0);
     return 0;
   }
@@ -83,7 +84,7 @@ double test1_deq_head_put_2_elements(Deq q) {
 function by adding 1 element(s) to the list 
 from the tail direction*/
 double test2_deq_tail_put_1_elements(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("2 - Testing deq_tail_put(Deq q, Data d) \n");
   printf("w/ 1 element\n");
   printf("----------------------------------\n");
@@ -92,7 +93,7 @@ double test2_deq_tail_put_1_elements(Deq q) {
   
   //List before adding 2 element
   char *s=deq_str(q,0);
-  printf("list before operation --> [ %s ]\n",s);
+  printf("before operation --> [ %s ]\n",s);
   free(s);
 
   //adding 1 element to the list
@@ -119,7 +120,7 @@ double test2_deq_tail_put_1_elements(Deq q) {
 function by adding 2 element(s) to the list 
 from the tail direction*/
 double test3_deq_tail_put_2_elements(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("3 - Testing deq_tail_put(Deq q, Data d) \n");
   printf("w/ 2 element\n");
   printf("----------------------------------\n");
@@ -128,24 +129,28 @@ double test3_deq_tail_put_2_elements(Deq q) {
   
   //List before adding 2 element
   char *s=deq_str(q,0);
-  printf("list before operation --> [ %s ]\n",s);
+  printf("before operation --> [ %s ]\n",s);
   free(s);
 
-  //adding 1 element to the list
+  //adding 2 elements to list
   deq_tail_put(q, "1");
+  char *r1=deq_str(q,0);
+  printf("after first insert --> [ %s ]\n",r1);
   deq_tail_put(q, "2");
-  char *result=deq_str(q,0);
-  printf("list after operation --> [ %s ]\n",result);
+  char *r2=deq_str(q,0);
+  printf("after second insert --> [ %s ]\n",r2);
 
   //comparing the expected with the result
-  if(strcmp(result,expected)==0){
+  if(strcmp(r2,expected)==0){
     fprintf(stderr, "Pass!\n");
-    free(result);
+    free(r1);
+    free(r2);
     deq_del(q,0);
     return 1;
   } else{
     fprintf(stderr, "Fail!\n");
-    free(result);
+    free(r1);
+    free(r2);
     deq_del(q,0);
     return 0;
   }
@@ -155,7 +160,7 @@ double test3_deq_tail_put_2_elements(Deq q) {
 /*Testing the deq_head_ith(Deq q, int i) 
 function with 1 element*/
 double test4_deq_head_ith_1_elements_0th_term(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("4 - Testing deq_head_ith(Deq q, int i) \n");
   printf("Returning element at index 0\n");
   printf("w/ 1 element\n");
@@ -191,7 +196,7 @@ double test4_deq_head_ith_1_elements_0th_term(Deq q) {
 /*Testing the deq_head_ith(Deq q, int i) 
 function with 1 element*/
 double test5_deq_head_ith_2_elements_0th_term(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("5 - Testing deq_head_ith(Deq q, int i) \n");
   printf("Returning element at index 0\n");
   printf("w/ 2 element\n");
@@ -228,7 +233,7 @@ double test5_deq_head_ith_2_elements_0th_term(Deq q) {
 /*Testing the deq_head_ith(Deq q, int i) 
 function with 2 element*/
 double test6_deq_head_ith_2_elements_1st_term(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("6 - Testing deq_head_ith(Deq q, int i) \n");
   printf("Returning element at index 1\n");
   printf("w/ 1 element\n");
@@ -265,7 +270,7 @@ double test6_deq_head_ith_2_elements_1st_term(Deq q) {
 /*Testing the deq_tail_ith(Deq q, int i) 
 function with 2 element*/
 double test7_deq_tail_ith_1_elements_0th_term(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("7 - Testing deq_tail_ith(Deq q, int i) \n");
   printf("Returning element at index 1\n");
   printf("w/ 1 element\n");
@@ -305,7 +310,7 @@ double test7_deq_tail_ith_1_elements_0th_term(Deq q) {
 /*Testing the deq_tail_ith(Deq q, int i) 
 function with 2 element*/
 double test8_deq_tail_ith_2_elements_0th_term(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("8 - Testing deq_tail_ith(Deq q, int i) \n");
   printf("Returning element at index 0\n");
   printf("w/ 2 element\n");
@@ -346,7 +351,7 @@ double test8_deq_tail_ith_2_elements_0th_term(Deq q) {
 /*Testing the deq_tail_ith(Deq q, int i) 
 function with 2 element*/
 double test9_deq_tail_ith_2_elements_1st_term(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("9 - Testing deq_tail_ith(Deq q, int i) \n");
   printf("Returning element at index 1\n");
   printf("w/ 2 element\n");
@@ -384,7 +389,7 @@ double test9_deq_tail_ith_2_elements_1st_term(Deq q) {
 /*Testing the deq_head_get(Deq q) 
 function with 1 element*/
 double test10_deq_head_get_1_elements(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("10 - deq_head_get(Deq q)  \n");
   printf("Returning front element (head direction)\n");
   printf("w/ 1 element\n");
@@ -406,6 +411,10 @@ double test10_deq_head_get_1_elements(Deq q) {
   printf("result = %s\n",result);
   printf("expected = %s\n",expected);
 
+  char *s1=deq_str(q,0);
+  printf("list after operation --> [ %s ]\n",s1);
+  free(s1);
+
   deq_del(q,0);
   //comparing the expected with the result
   if(strcmp(result,expected)==0){
@@ -421,7 +430,7 @@ double test10_deq_head_get_1_elements(Deq q) {
 /*Testing the deq_head_get(Deq q) 
 function with 2 element*/
 double test11_deq_head_get_2_elements(Deq q) {
-  printf("==================================\n");
+  printf("\n///////////////////////////////////////\n");
   printf("11 - deq_head_get(Deq q)\n");
   printf("Returning front element (head direction)\n");
   printf("w/ 2 element\n");
@@ -435,7 +444,8 @@ double test11_deq_head_get_2_elements(Deq q) {
   deq_head_put(q, "2"); //adding elements to list
 
   char *s=deq_str(q,0);
-  printf("list --> [ %s ]\n",s);
+  int size = deq_len(q);
+  printf("list --> [ %s ], size = %d\n",s, size);
   free(s);
 
   //first 1st term from the tail direction
@@ -443,6 +453,11 @@ double test11_deq_head_get_2_elements(Deq q) {
 
   printf("result = %s\n",result);
   printf("expected = %s\n",expected);
+
+  char *s1=deq_str(q,0);
+  int size1 = deq_len(q);
+  printf("list after operation --> [ %s ], size = %d\n",s1, size1);
+  free(s1);
 
   deq_del(q,0);
   //comparing the expected with the result
@@ -456,39 +471,220 @@ double test11_deq_head_get_2_elements(Deq q) {
 }
 
 //12///////////////////////////////////////////////////////
-/*Testing the deq_tail_get(Deq q) 
-function with 1 element*/
-double test12_deq_tail_get_1_elements(Deq q) {
-  return 0;
+/*Testing the deq_head_get(Deq q) 
+function with 3 element*/
+double test12_deq_head_get_3_elements(Deq q) {
+  printf("\n///////////////////////////////////////\n");
+  printf("12 - deq_head_get(Deq q)\n");
+  printf("Returning front element (head direction)\n");
+  printf("w/ 3 element\n");
+  printf("----------------------------------\n");
+
+  char expected[] = "3";
+  q = deq_new();
+
+  //List before operation
+  deq_head_put(q, "1"); //adding elements to list
+  deq_head_put(q, "2"); //adding elements to list
+  deq_head_put(q, "3"); //adding elements to list
+
+  char *s=deq_str(q,0);
+  int size = deq_len(q);
+  printf("list --> [ %s ], size = %d\n",s, size);
+  free(s);
+
+  //first 1st term from the tail direction
+  char* result =(char*)deq_head_get(q);
+
+  printf("result = %s\n",result);
+  printf("expected = %s\n",expected);
+
+  char *s1=deq_str(q,0);
+  int size1 = deq_len(q);
+  printf("list after operation --> [ %s ], size = %d\n",s1, size1);
+  free(s1);
+
+  deq_del(q,0);
+  //comparing the expected with the result
+  if(strcmp(result,expected)==0){
+    printf("Pass!\n");
+    return 1;
+  } else{
+    printf("Fail!\n");
+    return 0;
+  }
 }
 
-//13///////////////////////////////////////////////////////
-/*Testing the deq_tail_get(Deq q) 
-function with 2 element*/
-double test13_deq_tail_get_2_elements(Deq q) {
-  return 0;
-}
+// //13///////////////////////////////////////////////////////
+// /*Testing the deq_tail_get(Deq q) 
+// function with 1 element*/
+// double test13_deq_tail_get_1_elements(Deq q) {
+//   printf("\n///////////////////////////////////////\n");
+//   printf("13 - deq_tail_get(Deq q)\n");
+//   printf("Returning front element (tail direction)\n");
+//   printf("w/ 1 element\n");
+//   printf("----------------------------------\n");
+
+//   char expected[] = "1";
+//   q = deq_new();
+//   //List before operation
+//   deq_head_put(q, "1"); //adding elements to list
+
+//   char *s=deq_str(q,0);
+//   int size = deq_len(q);
+//   printf("before operation --> [ %s ], size = %d\n",s, size);
+//   free(s);
+
+//   //first 1st term from the tail direction
+//   char* result =(char*)deq_tail_get(q);
+
+//   // printf("result = %s\n",result);
+//   // printf("expected = %s\n",expected);
+
+//   char *s1=deq_str(q,0);
+//   int size1 = deq_len(q);
+//   printf("after operation --> [ %s ], size = %d\n",s1, size1);
+//   free(s1);
+//   //comparing the expected with the result
+//   if(strcmp(result,expected)==0){
+//     printf("Pass!\n");
+//     deq_del(q,0);
+//     return 1;
+//   } else{
+//     deq_del(q,0);
+//     printf("Fail!\n");
+//     return 0;
+//   }
+// }
 
 //14///////////////////////////////////////////////////////
-/*Testing the deq_head_rem(Deq q, Data d)
+/*Testing the deq_tail_get(Deq q) 
 function with 1 element*/
-double test14_deq_head_rem_1_elements(Deq q) {
-  return 0;
+double test14_deq_tail_get_2_elements(Deq q) {
+  printf("\n///////////////////////////////////////\n");
+  printf("14 - deq_tail_get(Deq q)\n");
+  printf("Returning front element (tail direction)\n");
+  printf("w/ 1 element\n");
+  printf("----------------------------------\n");
+
+  char expected[] = "1";
+  q = deq_new();
+
+  //List before operation
+  deq_head_put(q, "1"); //adding elements to list
+  deq_head_put(q, "2"); //adding elements to list
+
+  char *s=deq_str(q,0);
+  int size = deq_len(q);
+  printf("list --> [ %s ], size = %d\n",s, size);
+  free(s);
+
+  //first 1st term from the tail direction
+  char* result =(char*)deq_tail_get(q);
+
+  printf("result = %s\n",result);
+  printf("expected = %s\n",expected);
+
+  char *s1=deq_str(q,0);
+  int size1 = deq_len(q);
+  printf("list after operation --> [ %s ], size = %d\n",s1, size1);
+  free(s1);
+
+  deq_del(q,0);
+  //comparing the expected with the result
+  if(strcmp(result,expected)==0){
+    printf("Pass!\n");
+    return 1;
+  } else{
+    printf("Fail!\n");
+    return 0;
+  }
 }
 
 //15///////////////////////////////////////////////////////
-/*Testing the deq_head_rem(Deq q, Data d)
-function with 2 element*/
-double test15_deq_head_rem_2_elements(Deq q) {
-  return 0;
+/*Testing the deq_tail_get(Deq q) 
+function with 3 element*/
+double test15_deq_tail_get_3_elements(Deq q) {
+  printf("\n///////////////////////////////////////\n");
+  printf("15 - deq_tail_get(Deq q)\n");
+  printf("Returning front element (tail direction)\n");
+  printf("w/ 1 element\n");
+  printf("----------------------------------\n");
+
+  char expected[] = "1";
+  q = deq_new();
+
+  //List before operation
+  deq_head_put(q, "1"); //adding elements to list
+  deq_head_put(q, "2"); //adding elements to list
+  deq_head_put(q, "3"); //adding elements to list
+
+  char *s=deq_str(q,0);
+  int size = deq_len(q);
+  printf("list --> [ %s ], size = %d\n",s, size);
+  free(s);
+
+  //first 1st term from the tail direction
+  char* result =(char*)deq_tail_get(q);
+
+  printf("result = %s\n",result);
+  printf("expected = %s\n",expected);
+
+  char *s1=deq_str(q,0);
+  int size1 = deq_len(q);
+  printf("list after operation --> [ %s ], size = %d\n",s1, size1);
+  free(s1);
+
+  deq_del(q,0);
+  //comparing the expected with the result
+  if(strcmp(result,expected)==0){
+    printf("Pass!\n");
+    return 1;
+  } else{
+    printf("Fail!\n");
+    return 0;
+  }
 }
+
 
 //16///////////////////////////////////////////////////////
 /*Testing the deq_head_rem(Deq q, Data d)
 function with 3 element*/
 double test16_deq_head_rem_3_elements(Deq q) {
-  return 0;
+  printf("\n///////////////////////////////////////\n");
+  printf("16 - deq_head_rem(Deq q, Data d)\n");
+  printf("Removing the first term\n");
+  printf("w/ 3 element\n");
+  printf("----------------------------------\n");
+
+  // char expected[] = "[ 1 ]";
+  q = deq_new();
+
+  //List before operation
+  deq_head_put(q, "1"); //adding elements to list
+  deq_head_put(q, "2"); //adding elements to list
+  deq_head_put(q, "3"); //adding elements to list
+
+  char *s=deq_str(q,0);
+  int size = deq_len(q);
+  printf("list --> [ %s ], size = %d\n",s, size);
+  free(s);
+
+  //first 1st term from the tail direction
+  char* result =(char*)deq_head_rem(q, "1");
+  printf("data to remove --> %s\n", result);
+
+  char *s1=deq_str(q,0);
+  int size1 = deq_len(q);
+  printf("list after operation --> [ %s ], size = %d\n",s1, size1);
+  free(s1);
+
+  deq_del(q,0);
+  return 1;
 }
+
+
+
 
 //17///////////////////////////////////////////////////////
 /*Testing the deq_tail_rem(Deq q, Data d)
@@ -538,14 +734,14 @@ int main() {
   test_list[9] = test9_deq_tail_ith_2_elements_1st_term(q);
   test_list[10] = test10_deq_head_get_1_elements(q); 
   test_list[11] = test11_deq_head_get_2_elements(q);
-  test_list[12] = test12_deq_tail_get_1_elements(q); 
-  test_list[13] = test13_deq_tail_get_2_elements(q);
-  test_list[14] = test14_deq_head_rem_1_elements(q); 
-  test_list[15] = test15_deq_head_rem_2_elements(q);
+  test_list[12] = test12_deq_head_get_3_elements(q); 
+  // test_list[13] = test13_deq_tail_get_1_elements(q);
+  test_list[14] = test14_deq_tail_get_2_elements(q); 
+  test_list[15] = test15_deq_tail_get_3_elements(q);
   test_list[16] = test16_deq_head_rem_3_elements(q); 
-  test_list[17] = test17_deq_head_rem_1_elements(q);
-  test_list[18] = test18_deq_head_rem_2_elements(q);
-  test_list[19] = test19_deq_head_rem_3_elements(q); 
+  // test_list[17] = test17_deq_head_rem_1_elements(q);
+  // test_list[18] = test18_deq_head_rem_2_elements(q);
+  // test_list[19] = test19_deq_head_rem_3_elements(q); 
 
 
 

@@ -26,9 +26,10 @@ static Rep rep(Deq q) {
 
 /*Appends a new node onto an end*/
 static void put(Rep r, End e, Data d) {
+//allocate node
+Node new_node = deq_new();
 if(e==Head){
-  //allocate node
-  Node new_node=deq_new();
+
   //put in data
   new_node->data=d;
   //make next of new node as head and previous null
@@ -41,8 +42,6 @@ if(e==Head){
   //increment list size
   r->len=r->len+1;
 } else if(e==Tail){
-  //allocate node
-  Node new_node = deq_new();
   //create and last node
   Node last_node = r->ht[Head];
   //put data in new node
@@ -51,13 +50,14 @@ if(e==Head){
   //end would be null
   new_node->np[Tail]=0;
   //if list is empty, the inserted node 
-  //is th head
+  //is the head node and the tail node
   if((r->ht[Head])==0) {
-    new_node->np[Head] = 0;
+    new_node->np[Head] = 0; //the next for the inserted node is null
     r->ht[Head]=new_node;
+    r->ht[Tail]=new_node;
     return;
   }
-  //traverse till the last node
+  //traverse till the node before last
   while(last_node->np[Tail] != 0){
     last_node=last_node->np[Tail];
   }
@@ -108,39 +108,44 @@ static Data ith(Rep r, End e, int i) {
 /*get: return from an end, len--*/
 static Data get(Rep r, End e) { 
   Data d = 0;
+  //if the head node is null, the list is empty
+  if(r->ht[Head] == 0){
+    ERROR("empty list");
+  }
+  //current node
+  Node head_node = r->ht[Head];
+
   if(e==Head){
-    //if the head node is null
-    //list is empty
-    if(r->ht[Head] == 0){
-      ERROR("empty list");
-    }
-    //current node
-    Node head_node = r->ht[Head];
     //save the data before the node is deleted
     d = head_node->data;
     //unlink the head node
     r->ht[Head] = (r->ht[Head])->np[Tail];
     //free the head node
     free(head_node);
+    printf("head node deleted!!\n");
     //decrement list size
     r->len=r->len-1;
 
   } else if(e==Tail){
     if(r->ht[Head] != 0){
-      if(r->ht[Head] == 0){
+      //if the next of the head node is null
+      //free the head node
+      if((r->ht[Head])->np[Tail] == 0){
+        d = r->ht[Head]->data;
         r->ht[Head] = 0;
+        r->len=r->len-1;
+        free(r->ht[Head]);
       } else {
         Node temp = r->ht[Head];
-          //traverse till the last node
-        while(temp->np[Tail]->np[Tail] != 0){
-          temp=temp->np[Tail];
+        while(temp->np[Tail]->np[Tail]){
+          temp = temp -> np[Tail];
         }
 
-        //unlink the tail node
         Node last_node = temp->np[Tail];
-        temp->np[Tail] = 0;
         d = last_node->data;
+        temp->np[Tail] = 0;
         free(last_node);
+        //decrement list size
         r->len=r->len-1;
       }
     }
@@ -149,27 +154,35 @@ static Data get(Rep r, End e) {
 }
 
 /*rem: return by == comparing, len-- (iff found)*/
-static Data rem(Rep r, End e, Data d) { 
-  if(r->ht[Head] == 0){
-    ERROR("empty list");
-  }
-
-  Node curr = r->ht[Head];
-  Node next;
-  while(curr->np[Tail] != 0){
-    if(curr->data == d){
-        next = curr->np[Tail]; 
-        free(curr);
-        curr = next;
+static Data rem(Rep r, End e, Data d) {
+    Node temp = r->ht[Head];
+    if(temp!=0){
+      if(temp->data==d){
+        Node node_to_delete = r->ht[Head];
+        r->ht[Head] = (r->ht[Head])->np[Tail];
+        node_to_delete = 0;
+        if(r->ht[Head] != 0){
+          r->ht[Head]->np[Tail] = 0;
+        }
+        free(node_to_delete);
+      }
     } else {
-      curr = curr->np[Tail];
+      while(temp != 0){
+        if(temp->np[Tail]->data == d){
+          Node node_to_delete = temp->np[Tail];
+          temp->np[Tail] = temp->np[Tail]->np[Tail];
+          if(temp->np[Tail] != 0){
+            temp->np[Tail]->np[Head] = temp;
+            node_to_delete = 0;
+            free(node_to_delete);
+            break;
+          }
+          temp = temp->np[Tail];
+        }
+      }
     }
+    return d;
   }
-
-
-
-
-  return 0; }
 
 extern Deq deq_new() {
   Rep r=(Rep)malloc(sizeof(*r));
