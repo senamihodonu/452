@@ -55,6 +55,8 @@ if(e==Head){
     new_node->np[Head] = 0; //the next for the inserted node is null
     r->ht[Head]=new_node;
     r->ht[Tail]=new_node;
+    //increment list size
+    r->len=r->len+1;
     return;
   }
   //traverse till the node before last
@@ -74,9 +76,9 @@ if(e==Head){
 /*Takes a node reference, starting direction and an
 index and return by 0-base index, len unchanged*/
 static Data ith(Rep r, End e, int i) { 
-
   int counter = 0;
   Node curr = r->ht[Head];
+  //if index is greater or equal to the size of the list
   if(i >= r->len){
     ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
   }
@@ -113,28 +115,28 @@ static Data get(Rep r, End e) {
     ERROR("empty list");
   }
   //current node
-  Node head_node = r->ht[Head];
+  Node curr = r->ht[Head];
 
   if(e==Head){
     //save the data before the node is deleted
-    d = head_node->data;
+    d = curr->data;
     //unlink the head node
     r->ht[Head] = (r->ht[Head])->np[Tail];
     //free the head node
-    free(head_node);
+    free(curr);
     printf("head node deleted!!\n");
     //decrement list size
     r->len=r->len-1;
-
   } else if(e==Tail){
-    if(r->ht[Head] != 0){
+    if(curr != 0){
       //if the next of the head node is null
       //free the head node
-      if((r->ht[Head])->np[Tail] == 0){
-        d = r->ht[Head]->data;
+      if(curr->np[Tail] == 0){
+        d = curr->data;
         r->ht[Head] = 0;
         r->len=r->len-1;
-        free(r->ht[Head]);
+        free(curr);
+       printf("tail node deleted!!\n");
       } else {
         Node temp = r->ht[Head];
         while(temp->np[Tail]->np[Tail]){
@@ -145,6 +147,7 @@ static Data get(Rep r, End e) {
         d = last_node->data;
         temp->np[Tail] = 0;
         free(last_node);
+        printf("head node deleted!!\n");
         //decrement list size
         r->len=r->len-1;
       }
@@ -155,31 +158,76 @@ static Data get(Rep r, End e) {
 
 /*rem: return by == comparing, len-- (iff found)*/
 static Data rem(Rep r, End e, Data d) {
-    Node temp = r->ht[Head];
-    if(temp!=0){
-      if(temp->data==d){
-        Node node_to_delete = r->ht[Head];
-        r->ht[Head] = (r->ht[Head])->np[Tail];
-        node_to_delete = 0;
-        if(r->ht[Head] != 0){
-          r->ht[Head]->np[Tail] = 0;
+    Node curr = r->ht[Head]; //current pointer
+    //if the head node is null, the list is empty
+    if(curr == 0){
+      ERROR("empty list");
+    }
+    //when list has only one node
+    if (curr->np[Tail] == 0) {
+        if (curr->data == d) {
+            free(curr);
+            r->ht[Head] = 0;
+            r->len=r->len-1;
+        } else {
+            printf("No match found in list\n");
         }
-        free(node_to_delete);
-      }
-    } else {
-      while(temp != 0){
-        if(temp->np[Tail]->data == d){
-          Node node_to_delete = temp->np[Tail];
-          temp->np[Tail] = temp->np[Tail]->np[Tail];
-          if(temp->np[Tail] != 0){
-            temp->np[Tail]->np[Head] = temp;
-            node_to_delete = 0;
-            free(node_to_delete);
-            break;
+        return d;
+    }
+
+    if(e==Head){
+        // data is at the head node, make head next as head and delete previous head
+        if(curr->data == d) {
+          Node nodeToDelete = r->ht[Head];
+          r->ht[Head] = (r->ht[Head])->np[Tail];
+          free(nodeToDelete);
+          r->len=r->len-1;
+        } else {
+          // traverse to the node previous to the node with value equal to key, and adjust links 
+          while(curr) {
+            if(curr->np[Tail]->data == d) {
+              Node nodeToDelete = curr->np[Tail];
+              curr->np[Tail] = curr->np[Tail]->np[Tail];
+              free(nodeToDelete);
+              r->len=r->len-1;
+              break; 
+            } else {
+              curr = curr->np[Tail];
+            }
           }
-          temp = temp->np[Tail];
         }
-      }
+    } else {
+        Node prev = 0;
+        Node nodeToDelete = 0;
+        /*
+        * Keep track of previous node
+        */
+        while (curr && curr->np[Tail]) {
+            if ((curr->np[Tail])->data == d) {
+                prev = curr;
+                nodeToDelete = curr->np[Tail];
+            }
+            curr = curr->np[Tail];
+        }
+
+        if (prev){
+            prev->np[Tail] = nodeToDelete->np[Tail];
+            free (nodeToDelete);
+            r->len=r->len-1;
+        } else {
+            /*
+            * Special case when the last node is
+            * on the head itself
+            */
+                if ((r->ht[Head])->data == d) {
+                curr = r->ht[Head];
+                r->ht[Head] = curr->np[Tail];
+                free (curr);
+                r->len=r->len-1;
+            } else {
+                printf ("No match\n");
+            }
+          }
     }
     return d;
   }

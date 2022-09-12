@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Site BuildName="(empty)"
+	BuildStamp="20220912-0357-Experimental"
+	Name="(empty)"
+	Generator="ctest-3.22.1"
+	CompilerName=""
+	CompilerVersion=""
+	OSName="Linux"
+	Hostname="LAPTOP-IQ8G0K6B"
+	OSRelease="5.10.16.3-microsoft-standard-WSL2"
+	OSVersion="#1 SMP Fri Apr 2 22:23:49 UTC 2021"
+	OSPlatform="x86_64"
+	Is64Bits="1"
+	VendorString="GenuineIntel"
+	VendorID="Intel Corporation"
+	FamilyID="6"
+	ModelID="142"
+	ProcessorCacheSize="8192"
+	NumberOfLogicalCPU="8"
+	NumberOfPhysicalCPU="4"
+	TotalVirtualMemory="2048"
+	TotalPhysicalMemory="5832"
+	LogicalProcessorsPerPhysical="2"
+	ProcessorClockFrequency="2304.01"
+	>
+	<Testing>
+		<StartDateTime>Sep 11 21:57 MDT</StartDateTime>
+		<StartTestTime>1662955046</StartTestTime>
+		<TestList>
+			<Test>./tests/deq_tests</Test>
+		</TestList>
+		<Test Status="passed">
+			<Name>deq_tests</Name>
+			<Path>./tests</Path>
+			<FullName>./tests/deq_tests</FullName>
+			<FullCommandLine>/root/453-OperatingSystems/hw1/build/tests/deq_tests</FullCommandLine>
+			<Results>
+				<NamedMeasurement type="numeric/double" name="Execution Time">
+					<Value>0.0032746</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="numeric/double" name="Processors">
+					<Value>1</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Completion Status">
+					<Value>Completed</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Command Line">
+					<Value>/root/453-OperatingSystems/hw1/build/tests/deq_tests</Value>
+				</NamedMeasurement>
+				<NamedMeasurement type="text/string" name="Environment">
+					<Value>#CTEST_RESOURCE_GROUP_COUNT=</Value>
+				</NamedMeasurement>
+				<Measurement>
+					<Value encoding="base64" compression="gzip">eJyNUU1PhEAMvfMrelwOgJvVowcTjQcT10A8ETIZocIkQwdnimT99TLLhizuR3ynTt/ra6dNeyJFNbRS0SqET2taSKwxnNzebaJth1byyGc7x9i6pBnWSW1MrZHR8XHobJnUPhLeKi7LIL+fUUB66LMBr3FTo/X+Aa5XjHGQRzMKeNbmQ+qJR/pW1lCLNGqRo777I16YVvgV5JC+v8IehU/EihQrqdUPCmw73gmtHI+yCduXazJY3UDrwlNTT4pBcSMMjQUa/YSnpmdlF00VObQs2IgGZXVuxGN+trm2jkkEbFjqMPjfnhmljSoz0PKMF88HVlK8bDSO/vaQZU+P/muHwjj4Bc1yxg0=</Value>
+				</Measurement>
+			</Results>
+		</Test>
+		<EndDateTime>Sep 11 21:57 MDT</EndDateTime>
+		<EndTestTime>1662955046</EndTestTime>
+		<ElapsedMinutes>0</ElapsedMinutes>
+	</Testing>
+</Site>
