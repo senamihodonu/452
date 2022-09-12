@@ -960,7 +960,7 @@ double test22_deq_head_rem_1_elements_not_present(Deq q) {
 double test23_deq_tail_rem_1_elements_not_present(Deq q) {
   printf("\n///////////////////////////////////////\n");
   printf("23 - deq_head_rem(Deq q, Data d)\n");
-  printf("single item in list\n");
+  printf("item not in list\n");
   printf("----------------------------------\n");
 
   char expected[] = "[ 2 ]";
