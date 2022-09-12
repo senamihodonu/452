@@ -225,7 +225,7 @@ static Data rem(Rep r, End e, Data d) {
                 free (curr);
                 r->len=r->len-1;
             } else {
-                printf ("No match\n");
+                printf("No match found in list\n");
             }
           }
     }
