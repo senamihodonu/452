@@ -4,6 +4,9 @@
 
 #include "deq.h"
 #include "error.h"
+/*
+* Implementation of a double-ended doubly-linked queue
+*/
 
 // indices and size of array of node pointers
 typedef enum {Head,Tail,Ends} End;
@@ -24,7 +27,7 @@ static Rep rep(Deq q) {
 }
 
 
-/*Appends a new node onto an end*/
+/*Appends a new node onto an end (Head/Tail)*/
 static void put(Rep r, End e, Data d) {
 //allocate node
 Node new_node = deq_new();
@@ -107,7 +110,7 @@ static Data ith(Rep r, End e, int i) {
   return 0; 
 }
 
-/*get: return from an end, len--*/
+/*get: return the top data from an end, len--*/
 static Data get(Rep r, End e) { 
   Data d = 0;
   //if the head node is null, the list is empty
@@ -176,14 +179,16 @@ static Data rem(Rep r, End e, Data d) {
     }
 
     if(e==Head){
-        // data is at the head node, make head next as head and delete previous head
+        // data is at the head node, make head next 
+        // as head and delete previous head
         if(curr->data == d) {
           Node nodeToDelete = r->ht[Head];
           r->ht[Head] = (r->ht[Head])->np[Tail];
           free(nodeToDelete);
           r->len=r->len-1;
         } else {
-          // traverse to the node previous to the node with value equal to key, and adjust links 
+          // traverse to the node previous to the node 
+          // with value equal to key, and adjust links 
           while(curr) {
             if(curr->np[Tail]->data == d) {
               Node nodeToDelete = curr->np[Tail];
@@ -199,10 +204,8 @@ static Data rem(Rep r, End e, Data d) {
     } else {
         Node prev = 0;
         Node nodeToDelete = 0;
-        /*
-        * Keep track of previous node
-        */
-        while (curr && curr->np[Tail]) {
+        //Keep track of previous node
+        while (curr && curr->np[Tail] != 0) {
             if ((curr->np[Tail])->data == d) {
                 prev = curr;
                 nodeToDelete = curr->np[Tail];
@@ -210,15 +213,12 @@ static Data rem(Rep r, End e, Data d) {
             curr = curr->np[Tail];
         }
 
-        if (prev){
+        if (prev != 0){
             prev->np[Tail] = nodeToDelete->np[Tail];
             free (nodeToDelete);
             r->len=r->len-1;
         } else {
-            /*
-            * Special case when the last node is
-            * on the head itself
-            */
+                //if last node is the head
                 if ((r->ht[Head])->data == d) {
                 curr = r->ht[Head];
                 r->ht[Head] = curr->np[Tail];

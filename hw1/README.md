@@ -16,7 +16,7 @@ leaks were present in the program.
 ## Building the project
 
 To build this program, in the directory containing the program, the make 
-command is issued:
+command is run:
 
 $ make
 
@@ -32,8 +32,8 @@ $ make run
 
 
 ## Testing
-The intial thought to test this program was to the Google Test framework for C.
-A few scenarios were tested using this framework, however due to the growing 
+The intial thought to test this program was to use the Google Test framework 
+for C. A few scenarios were tested using this framework, however due to the growing 
 complexity, this thought was abandoned and a total of 24 different tests where 
 manually written to the main.c file to test this program. 
 
@@ -79,4 +79,3 @@ https://stackoverflow.com/questions/7604762/finding-and-removing-the-last-occurr
 https://www.alphacodingskills.com/ds/notes/doubly-linked-list-delete-first-node-by-key.php
 https://www.alphacodingskills.com/ds/notes/linked-list-delete-first-node-by-key.php
 
-[Here is some help creating links](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet#links)
