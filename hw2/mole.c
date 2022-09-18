@@ -7,6 +7,8 @@
 #include "lawnimp.h"
 #undef LAWNIMP
 #include "error.h"
+#include "deq.h"
+
 
 static int rdm(int lo, int hi) {
   return random()%(hi-lo+1)+lo;
