@@ -7,7 +7,7 @@
 #include "lawnimp.h"
 #undef LAWNIMP
 #include "error.h"
-#include "deq.h"
+
 
 
 static int rdm(int lo, int hi) {
