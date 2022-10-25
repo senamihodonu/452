@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include<pthread.h>
 
 #include "deq.h"
 #include "error.h"
@@ -20,9 +19,6 @@ typedef struct Node {
 typedef struct {
   Node ht[Ends];			// head/tail nodes
   int len;
-  pthread_mutex_t lock;
-  pthread_cond_t condv;
-  int size
 } *Rep;
 
 static Rep rep(Deq q) {
@@ -30,15 +26,11 @@ static Rep rep(Deq q) {
   return (Rep)q;
 }
 
+
 /*Appends a new node onto an end (Head/Tail)*/
 static void put(Rep r, End e, Data d) {
 //allocate node
-Node new_node = deq_new(r->size);
-pthread_mutex_lock(&r->lock); ///////////////////////
-while(r->len >= r->size){
-  pthread_cond_wait(&r->condv,&r->lock);
-}
-// pthread_cond_signal(&r->condv);
+Node new_node = deq_new();
 if(e==Head){
 
   //put in data
@@ -52,6 +44,7 @@ if(e==Head){
   r->ht[Head] = new_node;
   //increment list size
   r->len=r->len+1;
+    printf("data added to head, deq length = %d\n", r->len);
 } else if(e==Tail){
   //create and last node
   Node last_node = r->ht[Head];
@@ -68,22 +61,22 @@ if(e==Head){
     r->ht[Tail]=new_node;
     //increment list size
     r->len=r->len+1;
+    printf("data added to tail, deq length = %d\n", r->len);
     return;
   }
-  //traverse till the node before last
+    //traverse till the node before last
   while(last_node->np[Tail] != 0){
-    last_node=last_node->np[Tail];
+      last_node=last_node->np[Tail];
   }
-  //the last node becomes the new node
-  last_node->np[Tail]=new_node;
-  //the last node is the previous of the
-  //node indserted at the end
-  new_node->np[Head] = last_node;
-  //increment list size
-  r->len=r->len+1;
-}
-pthread_mutex_unlock(&r->lock);
-pthread_cond_signal(&r->condv);
+    //the last node becomes the new node
+    last_node->np[Tail]=new_node;
+    //the last node is the previous of the
+    //node indserted at the end
+    new_node->np[Head] = last_node;
+    //increment list size
+    r->len=r->len+1;
+    printf("data added to tail, deq length = %d\n", r->len);
+  }
 }
 
 /*Takes a node reference, starting direction and an
@@ -91,10 +84,6 @@ index and return by 0-base index, len unchanged*/
 static Data ith(Rep r, End e, int i) { 
   int counter = 0;
   Node curr = r->ht[Head];
-  while(r->len >= r->size){
-    pthread_mutex_lock(&r->lock); ///////////////////////
-  }
-
   //if index is greater or equal to the size of the list
   if(i >= r->len){
     ERROR("IndexOutOfBoundsException: Index: %d, Size: %d\n", i, r->len);
@@ -121,20 +110,15 @@ static Data ith(Rep r, End e, int i) {
           curr = curr->np[Tail];
         }
   }
-  pthread_mutex_unlock(&r->lock); ///////////////////////
   return 0; 
 }
 
 /*get: return the top data from an end, len--*/
 static Data get(Rep r, End e) { 
-  pthread_mutex_lock(&r->lock);
-  while (r->len == 0){
-    pthread_cond_wait(&r->condv,&r->lock);
-  }
   Data d = 0;
   //if the head node is null, the list is empty
   if(r->ht[Head] == 0){
-    ERROR("empty list(#el00)!");
+    ERROR("empty list");
   }
   //current node
   Node curr = r->ht[Head];
@@ -146,9 +130,9 @@ static Data get(Rep r, End e) {
     r->ht[Head] = (r->ht[Head])->np[Tail];
     //free the head node
     free(curr);
-    printf("head node removed(#hn00)!\n");
     //decrement list size
     r->len=r->len-1;
+    printf("node deleted from the head, deq length = %d\n", r->len);
   } else if(e==Tail){
     if(curr != 0){
       //if the next of the head node is null
@@ -158,7 +142,7 @@ static Data get(Rep r, End e) {
         r->ht[Head] = 0;
         r->len=r->len-1;
         free(curr);
-       printf("tail node deleted(#tn00)!\n");
+        printf("node deleted from the tail, deq length = %d\n", r->len);
       } else {
         Node temp = r->ht[Head];
         while(temp->np[Tail]->np[Tail]){
@@ -169,20 +153,17 @@ static Data get(Rep r, End e) {
         d = last_node->data;
         temp->np[Tail] = 0;
         free(last_node);
-        printf("tail node deleted(#tn01)!\n");
         //decrement list size
         r->len=r->len-1;
+        printf("node deleted from the tail, deq length = %d\n", r->len);
       }
     }
   }
-  pthread_mutex_unlock(&r->lock);
-  pthread_cond_signal(&r->condv);
   return d; 
 }
 
 /*rem: return by == comparing, len-- (iff found)*/
 static Data rem(Rep r, End e, Data d) {
-  pthread_mutex_lock(&r->lock); ///////////////////////
     Node curr = r->ht[Head]; //current pointer
     //if the head node is null, the list is empty
     if(curr == 0){
@@ -194,9 +175,11 @@ static Data rem(Rep r, End e, Data d) {
             free(curr);
             r->ht[Head] = 0;
             r->len=r->len-1;
+            
         } else {
             printf("No match found in list\n");
         }
+        printf("deq length = %d\n", r->len);
         return d;
     }
 
@@ -251,18 +234,16 @@ static Data rem(Rep r, End e, Data d) {
             }
           }
     }
-    pthread_mutex_unlock(&r->lock); ///////////////////////
+    printf("l = %d!!\n", r->len);
     return d;
   }
 
-extern Deq deq_new(int size) {
+extern Deq deq_new() {
   Rep r=(Rep)malloc(sizeof(*r));
   if (!r) ERROR("malloc() failed");
-  pthread_mutex_init(&r->lock, 0); //initialize lock
-  pthread_cond_init(&r->condv,0); //initialize condition variable
   r->ht[Head]=0;
   r->ht[Tail]=0;
-  r->len=size;
+  r->len=0;
   return r;
 }
 
