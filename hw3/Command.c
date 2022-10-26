@@ -26,7 +26,7 @@ static void builtin_args(CommandRep r, int n) {
     ERROR("wrong number of arguments to builtin command"); // warn
 }
 
-BIDEFN(exit) {
+BIDEFN(xit) {
   builtin_args(r,0);
   *eof=1;
 }
@@ -59,7 +59,7 @@ static int builtin(BIARGS) {
     void (*f)(BIARGS);
   } Builtin;
   static const Builtin builtins[]={
-    BIENTRY(exit),
+    BIENTRY(xit),
     BIENTRY(pwd),
     BIENTRY(cd),
     {0,0}
