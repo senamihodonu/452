@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #include "Command.h"
 #include "error.h"
@@ -9,6 +11,7 @@
 typedef struct {
   char *file;
   char **argv;
+  T_redir redir;
 } *CommandRep;
 
 #define BIARGS CommandRep r, int *eof, Jobs jobs
@@ -18,6 +21,7 @@ typedef struct {
 
 static char *owd=0;
 static char *cwd=0;
+int status;
 
 static void builtin_args(CommandRep r, int n) {
   char **argv=r->argv;
@@ -26,7 +30,7 @@ static void builtin_args(CommandRep r, int n) {
     ERROR("wrong number of arguments to builtin command"); // warn
 }
 
-BIDEFN(xit) {
+BIDEFN(exit) {
   builtin_args(r,0);
   *eof=1;
 }
@@ -59,7 +63,7 @@ static int builtin(BIARGS) {
     void (*f)(BIARGS);
   } Builtin;
   static const Builtin builtins[]={
-    BIENTRY(xit),
+    BIENTRY(exit),
     BIENTRY(pwd),
     BIENTRY(cd),
     {0,0}
@@ -93,12 +97,13 @@ static char **getargs(T_words words) {
   return argv;
 }
 
-extern Command newCommand(T_words words) {
+extern Command newCommand(T_words words, T_redir redir) {
   CommandRep r=(CommandRep)malloc(sizeof(*r));
   if (!r)
     ERROR("malloc() failed");
   r->argv=getargs(words);
   r->file=r->argv[0];
+  r->redir=redir;
   return r;
 }
 
@@ -115,6 +120,9 @@ static void child(CommandRep r, int fg) {
 extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
+  // T_redir redir = r->redir;
+  printf("%s\n",r->redir->op);
+
   if (fg && builtin(r,eof,jobs))
     return;
   if (!*jobbed) {
@@ -124,8 +132,11 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   int pid=fork();
   if (pid==-1)
     ERROR("fork() failed");
-  if (pid==0)
+  
+  if (pid==0){
+    // printf("fg = %d\n", fg);
     child(r,fg);
+  } else wait(NULL);
 }
 
 extern void freeCommand(Command command) {
@@ -141,3 +152,8 @@ extern void freestateCommand() {
   if (cwd) free(cwd);
   if (owd) free(owd);
 }
+
+// int redirCheck(Command command){
+//   CommandRep r=command; 
+//   char* out = strstr(command-)
+// }

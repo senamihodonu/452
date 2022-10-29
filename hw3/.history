@@ -2,3 +2,113 @@ history
 pwd
 exit
 xit
+pwd
+exit
+ls
+ls
+cd -
+ls
+exit
+ls
+cd -
+pwd
+cat error.h
+ls
+cd -
+pwd
+exit
+ls
+cd -
+pwd
+exit
+testing/a.out &
+ls
+testing/a.out 
+testing/a.out 
+ls
+testing/a.out &
+ls
+exit
+testing/a.out &
+ls
+ls
+testing/a.out 
+ls
+testing/a.out &
+ls
+exit
+testing/a.out
+ls
+testing/a.out &
+ls
+make clean
+exit
+testing/a.out &
+ls
+testing/a.out 
+ls
+exit
+testing/a.out 
+ls
+testing/a.out &
+ls
+exit
+ls
+testing/a.out &
+ls
+exit
+testing/a.out
+ls
+testing/a.out &
+ls
+exit
+testing/a.out
+ls
+testing/a.out $
+ls
+exit
+testing/a.out
+ls
+testing/a.out
+ls
+testing/a.out &
+ls
+clear
+make clean
+exit
+ls
+testing/a.out
+ls
+exi
+exit
+ls
+testing/a.out
+ls
+testing/a.out &
+ls
+exit
+testing/a.out &
+ls
+exit
+testing/a.out &
+ls
+testing/a.out 
+ls
+ls
+testing/a.out ; cd -
+ls
+testing/a.out ; pwd
+testing/a.out & ; pwd
+testing/a.out & 
+pwd
+testing/a.out 
+pwd
+exit
+pwd > tets
+make
+make clean
+clear
+exit
+pwd > tes
+clear
+exit
