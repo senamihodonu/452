@@ -26,7 +26,7 @@ static T_redir p_redir();
 
 static T_word p_word() {
   char *s=curr();
-  if (!s || strcmp(s,"<") == 0 || strcmp(s,">")==0)
+  if (!s || strcmp(s,"<")==0 || strcmp(s,">")==0)
     return 0;
   T_word word=new_word();
   word->s=strdup(s);
@@ -94,7 +94,7 @@ static T_sequence p_sequence() {
 static T_redir p_redir(){
   T_redir redir =new_redir();
   if(eat(">")){
-    redir->op=strdup(">");
+    redir->op=">";
     T_word word= p_word();
     redir->word=word;
 

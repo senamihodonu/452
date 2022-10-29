@@ -121,8 +121,9 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
   // T_redir redir = r->redir;
-  printf("%s\n",r->redir->op);
-
+  if(r->redir->op){
+    printf("%s\n",r->redir->op);
+  }
   if (fg && builtin(r,eof,jobs))
     return;
   if (!*jobbed) {

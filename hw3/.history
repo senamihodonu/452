@@ -112,3 +112,12 @@ exit
 pwd > tes
 clear
 exit
+pwd
+make clean
+clear
+exit
+pwd > test
+ls
+pwd
+pwd > test
+exit
