@@ -114,20 +114,37 @@ static void child(CommandRep r, int fg) {
   if (builtin(r,&eof,jobs))
     return;
   ////////////////////////////
-  // int save =  dup(0);
-  // char *out_file = r->redir->word->s;
-  // char *out = r->redir->op;
-  // int fd = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+  T_redir dir = new_redir();
+  int savec =  dup(STDOUT_FILENO);
+  int fdo = 0;
+  int fdi = 0;
+  char *io = NULL;
+  char *in_file= NULL;
 
-  // if(out){
-  //   close(1);
-  //   if(fd<0)
-  //     exit(1);
-  //   dup2(fd,STDOUT_FILENO);
-  //   close(fd);    
-  //   dup2(save,STDOUT_FILENO);
-  //   close(save);
-  // } 
+  if(dir->op){  
+    char* out_file1 = strdup(r->redir->word->s);
+    io = strdup(r->redir->op);
+    if(strcmp(io,">") == 0){
+      printf("%s\n", io);
+      fdo = open(out_file1, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+      if(fdo<0)
+        exit(0);
+      dup(fdo);
+      fflush(stdout);
+      close(fdo);
+      dup2(savec,STDOUT_FILENO);
+      close(savec);
+    }
+
+    if(strcmp(io,"<") == 0){
+      close(0);
+      fdi = open(in_file, O_RDONLY);
+      if(fdi<0)
+        exit(0);
+      dup2(fdi,fileno(stdin));
+      // close(fdi);    
+    }
+  }
   ///////////////////////////
   execvp(r->argv[0],r->argv);
   ERROR("execvp() failed");
@@ -137,53 +154,40 @@ static void child(CommandRep r, int fg) {
 extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
-  T_redir dir = r->redir;
-  int save =  dup(STDOUT_FILENO);
-  int fdO = 0;
-  char *out = NULL;
-  char *out_file= NULL;
-  out_file=(char*)malloc(sizeof(out_file));
+  
+  // T_redir dir = r->redir;
+  // int save =  dup(STDOUT_FILENO);
+  // int fdO = 0;
+  // char *out = NULL;
+  // char *out_file= NULL;
+  // out_file=(char*)malloc(sizeof(out_file));
 
-  if(dir->op){
-    close(STDOUT_FILENO);
-    char *out = dir->op;
-    char *out_file = dir->word->s;
-    
-    // char *in = dir->op;
-    // char *in_file = dir->word->s;
+  // if(dir->op){
+  //   close(STDOUT_FILENO);
+  //   char *out = dir->op;
+  //   char *out_file = strdup(dir->word->s);
 
-    if(out){
-      // printf("%s\n",out_file);
-      fdO = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-      if(fdO<0)
-        exit(1);
-      dup(fdO);
-      fflush(stdout);
-    }
+  //   if(out){
+  //     // printf("%s\n",out_file);
+  //     fdO = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+  //     if(fdO<0)
+  //       exit(1);
+  //     dup(fdO);
+  //     fflush(stdout);
+  //   }
+  // }
 
-    // if(in){
-    //   // printf("%s\n",out_file);
-    //   fdO = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-    //   if(fdO<0)
-    //     exit(1);
-    //   dup(fdO);
-    //   fflush(stdout);
-    // }
-    // wait(NULL);
-  }
-
-
-  if (fg && builtin(r,eof,jobs)){
-    if(dir->op){
-      close(fdO);
-      dup2(save,STDOUT_FILENO);
-      close(save);
-    }
-    fflush(stdout);
-    free(out);
-    free(out_file);
-    return;
-  }
+  // if (fg && builtin(r,eof,jobs)){
+  //   if(dir->op){
+  //     close(fdO);
+  //     dup2(save,STDOUT_FILENO);
+  //     close(save);
+  //   }
+  //   fflush(stdout);
+  //   free(out);
+  //   free(out_file);
+  //   return;
+  // }
 
   if (!*jobbed) {
     *jobbed=1;
@@ -196,25 +200,6 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
      
   if (pid==0){
     child(r,fg);
-  // ///////////////////////////
-  int save =  dup(STDOUT_FILENO);
-  int fd = 0;
-  char *out = r->redir->op;
-  char *out_file = r->redir->word->s;
-
-  if(out){
-    close(1);
-    fd = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-    if(fd<0)
-      exit(1);
-    dup(fd);
-    fflush(stdout);
-    close(fd);
-    dup2(save,STDOUT_FILENO);
-    close(save);
-    exit(0);
-  } 
-  // ///////////////////////////
     return;
   } else wait(NULL);
 }

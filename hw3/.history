@@ -196,3 +196,5 @@ exit
 pwd
 pwd > our
 exit
+ls
+exit
