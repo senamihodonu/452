@@ -18,7 +18,10 @@ $(prog): $(objs) ; $(ld) -o $@ $^ $(ldflags)
 
 .PHONY: clean run valgrind
 
-clean: ; rm -f $(prog) *.o *.d *.i
+clean: ; rm -f $(prog) *.o *.d *.i; 
+
+cc: ; rm -f $(prog) *.o *.d *.i; clear
+
 
 run:      $(prog) ; ./$< $(args)
 valgrind: $(prog) ; $@ --leak-check=full --show-leak-kinds=all ./$< $(args)
