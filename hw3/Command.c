@@ -131,10 +131,9 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   char *out_file= NULL;
   char *in_file= NULL;
 
-  if(dir->op){
+  if(dir->out){
     close(STDOUT_FILENO);
-    char *io = dir->op;
-
+    char *io = dir->out;
     if(strcmp(io,"<")==0){
       in_file = dir->word->s;
       fdI = open(in_file, O_RDONLY);
@@ -153,7 +152,7 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   }
 
   if (fg && builtin(r,eof,jobs)){
-    if(dir->op){
+    if(dir->out){
       close(fdO);
       close(fdI);
       dup2(in,STDIN_FILENO);

@@ -94,16 +94,16 @@ static T_sequence p_sequence() {
 static T_redir p_redir(){
   T_redir redir =new_redir();
   if(eat("<")){
-    redir->op="<";
+    redir->out="<";
     T_word word= p_word();
     redir->word=word;
     if(eat(">")){
-      redir->op=">";
+      redir->out=">";
       T_word word0=p_word();
       redir->word=word0;
     }
   } else if(eat(">")){
-    redir->op=">";
+    redir->out=">";
     T_word word= p_word();
     redir->word=word;
   }
