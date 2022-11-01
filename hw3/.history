@@ -198,3 +198,56 @@ pwd > our
 exit
 ls
 exit
+ls
+ls > test
+pwd
+pwd > test
+ls
+testing/a.out > new_file
+ls
+exit
+ls
+pwd
+pwd > test
+ls
+clerar
+clear
+make clean
+exit
+ls
+pwd
+ls > z
+exit
+ls
+pwd
+ls < z
+rm -rf z
+rm -rf test
+rm -rf out
+ls
+make clean
+ls
+exit
+ls
+make clean
+rm -rf z
+clear
+exit
+exit
+ls
+wc < wc_test.txt 
+make cc
+exit
+ls
+wc < wc_test.txt 
+exit
+exit 
+wc < wc_test.txt 
+exit
+exit
+ls
+ls
+shel
+shell
+./shell
+exit

@@ -1,0 +1,5 @@
+So, you have stdin and stdout of the main shell redirected to the files 
+(and no way of reinstating those to the original values). Your first problem, 
+therefore, is that you are doing the redirection before you fork(); you should 
+be doing it after the fork() — though when you get to piping between processes, 
+you will need to create pipes before forking.

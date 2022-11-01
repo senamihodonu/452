@@ -113,39 +113,6 @@ static void child(CommandRep r, int fg) {
   Jobs jobs=newJobs();
   if (builtin(r,&eof,jobs))
     return;
-  ////////////////////////////
-  T_redir dir = new_redir();
-  int savec =  dup(STDOUT_FILENO);
-  int fdo = 0;
-  int fdi = 0;
-  char *io = NULL;
-  char *in_file= NULL;
-
-  if(dir->op){  
-    char* out_file1 = strdup(r->redir->word->s);
-    io = strdup(r->redir->op);
-    if(strcmp(io,">") == 0){
-      printf("%s\n", io);
-      fdo = open(out_file1, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-      if(fdo<0)
-        exit(0);
-      dup(fdo);
-      fflush(stdout);
-      close(fdo);
-      dup2(savec,STDOUT_FILENO);
-      close(savec);
-    }
-
-    if(strcmp(io,"<") == 0){
-      close(0);
-      fdi = open(in_file, O_RDONLY);
-      if(fdi<0)
-        exit(0);
-      dup2(fdi,fileno(stdin));
-      // close(fdi);    
-    }
-  }
-  ///////////////////////////
   execvp(r->argv[0],r->argv);
   ERROR("execvp() failed");
   exit(0);
@@ -155,39 +122,52 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
   
-  // T_redir dir = r->redir;
-  // int save =  dup(STDOUT_FILENO);
-  // int fdO = 0;
-  // char *out = NULL;
-  // char *out_file= NULL;
-  // out_file=(char*)malloc(sizeof(out_file));
+  T_redir dir = r->redir;
+  int save =  dup(STDOUT_FILENO);
+  int in =  dup(STDIN_FILENO);
+  int fdI = 0;
+  int fdO = 0;
+  char *io = NULL;
+  char *out_file= NULL;
+  char *in_file= NULL;
 
-  // if(dir->op){
-  //   close(STDOUT_FILENO);
-  //   char *out = dir->op;
-  //   char *out_file = strdup(dir->word->s);
+  if(dir->op){
+    close(STDOUT_FILENO);
+    char *io = dir->op;
 
-  //   if(out){
-  //     // printf("%s\n",out_file);
-  //     fdO = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-  //     if(fdO<0)
-  //       exit(1);
-  //     dup(fdO);
-  //     fflush(stdout);
-  //   }
-  // }
+    if(strcmp(io,"<")==0){
+      in_file = dir->word->s;
+      fdI = open(in_file, O_RDONLY);
+      if(fdI<0)
+        exit(1);
+      dup(fdI);
+      fflush(stdin);
+    } else if(strcmp(io,">")==0){
+      out_file = strdup(dir->word->s);
+      fdO = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+      if(fdO<0)
+        exit(1);
+      dup(fdO);
+      // fflush(stdout);
+    }
+  }
 
-  // if (fg && builtin(r,eof,jobs)){
-  //   if(dir->op){
-  //     close(fdO);
-  //     dup2(save,STDOUT_FILENO);
-  //     close(save);
-  //   }
-  //   fflush(stdout);
-  //   free(out);
-  //   free(out_file);
-  //   return;
-  // }
+  if (fg && builtin(r,eof,jobs)){
+    if(dir->op){
+      close(fdO);
+      close(fdI);
+      dup2(in,STDIN_FILENO);
+      close(in);
+      dup2(save,STDOUT_FILENO);
+      close(save);
+    }
+    fflush(stdout);
+    fflush(stdin);
+    free(io);
+    free(out_file);
+    free(in_file);
+    return;
+  }
 
   if (!*jobbed) {
     *jobbed=1;
@@ -201,7 +181,13 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   if (pid==0){
     child(r,fg);
     return;
-  } else wait(NULL);
+  } 
+  else wait(NULL);
+
+  dup2(in,STDIN_FILENO);
+  close(in);
+  dup2(save,STDOUT_FILENO);
+  close(save);
 }
 
 extern void freeCommand(Command command) {
