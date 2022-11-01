@@ -124,42 +124,52 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   
   T_redir dir = r->redir;
   int save =  dup(STDOUT_FILENO);
-  int in =  dup(STDIN_FILENO);
-  int fdI = 0;
-  int fdO = 0;
+  int input =  dup(STDIN_FILENO);
+  int fd0 = 0;
+  int fd1 = 0;
   char *io = NULL;
   char *out_file= NULL;
   char *in_file= NULL;
 
-  if(dir->out){
-    close(STDOUT_FILENO);
-    char *io = dir->out;
-    if(strcmp(io,"<")==0){
+  //if < word
+  if(dir->in){
+    close(STDIN_FILENO);
       in_file = dir->word->s;
-      fdI = open(in_file, O_RDONLY);
-      if(fdI<0)
+      fd0 = open(in_file, O_RDONLY);
+      if(fd0<0)
         exit(1);
-      dup(fdI);
-      fflush(stdin);
-    } else if(strcmp(io,">")==0){
+      //if < word > word
+      if(dir->out){
+        dup2(input,fd0);
+        out_file = strdup(dir->word1->s);
+        fd1 = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+        if(fd1<0)
+           exit(1);
+        dup(fd1);
+      }
+  } //if > word
+  else if(dir->out){
+      close(STDOUT_FILENO);
       out_file = strdup(dir->word->s);
-      fdO = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
-      if(fdO<0)
+      fd1 = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
+      if(fd1<0)
         exit(1);
-      dup(fdO);
-      // fflush(stdout);
-    }
+      dup(fd1);
   }
 
   if (fg && builtin(r,eof,jobs)){
+    if(dir->in){
+      close(fd0);
+      dup2(input,STDIN_FILENO);
+      close(input);
+    }
+
     if(dir->out){
-      close(fdO);
-      close(fdI);
-      dup2(in,STDIN_FILENO);
-      close(in);
+      close(fd1);
       dup2(save,STDOUT_FILENO);
       close(save);
     }
+
     fflush(stdout);
     fflush(stdin);
     free(io);
@@ -183,8 +193,8 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   } 
   else wait(NULL);
 
-  dup2(in,STDIN_FILENO);
-  close(in);
+  dup2(input,STDIN_FILENO);
+  close(input);
   dup2(save,STDOUT_FILENO);
   close(save);
 }

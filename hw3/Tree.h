@@ -31,6 +31,7 @@ struct T_words {
 
 struct T_redir {
   T_word word;
+  T_word word1;
   char *in;/* > */
   char *out;/* > */
 };
