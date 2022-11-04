@@ -59,7 +59,6 @@ BIDEFN(history) {
   }
   
     fclose(fptr);
-    free(fptr);
 }
 
 BIDEFN(cd) {
