@@ -1,1 +1,1 @@
-pwd
+wc -l < deq.h

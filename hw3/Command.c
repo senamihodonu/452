@@ -6,8 +6,11 @@
 #include <sys/wait.h>
 #include <fcntl.h>
 
+
 #include "Command.h"
 #include "error.h"
+
+
 
 typedef struct {
   char *file;
@@ -22,7 +25,10 @@ typedef struct {
 
 static char *owd=0;
 static char *cwd=0;
+FILE *fptr;
 int status;
+
+int checkBG(CommandRep r);
 
 static void builtin_args(CommandRep r, int n) {
   char **argv=r->argv;
@@ -41,6 +47,19 @@ BIDEFN(pwd) {
   if (!cwd)
     cwd=getcwd(0,0);
   printf("%s\n",cwd);
+}
+
+BIDEFN(history) {
+  builtin_args(r,0);
+  fptr = fopen(".history", "r");
+  char c = fgetc(fptr);
+  while (c != EOF) {
+        printf ("%c", c);
+        c = fgetc(fptr);
+  }
+  
+    fclose(fptr);
+    free(fptr);
 }
 
 BIDEFN(cd) {
@@ -67,6 +86,7 @@ static int builtin(BIARGS) {
     BIENTRY(exit),
     BIENTRY(pwd),
     BIENTRY(cd),
+    BIENTRY(history),
     {0,0}
   };
   int i;
@@ -121,6 +141,10 @@ static void child(CommandRep r, int fg) {
 extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
+
+  fg = checkBG(r);
+  // printf("%d", fg);
+  
   
   T_redir dir = r->redir;
   int save =  dup(STDOUT_FILENO);
@@ -131,7 +155,7 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
   char *out_file= NULL;
   char *in_file= NULL;
 
-  //if < word
+   //if < word
   if(dir->in){
     close(STDIN_FILENO);
       in_file = dir->word->s;
@@ -140,7 +164,9 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
         exit(1);
       //if < word > word
       if(dir->out){
-        dup2(input,fd0);
+        close(fd0);
+        dup2(input,STDIN_FILENO);
+        close(input);
         out_file = strdup(dir->word1->s);
         fd1 = open(out_file, O_CREAT | O_WRONLY | O_TRUNC, 0777);
         if(fd1<0)
@@ -157,42 +183,61 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
       dup(fd1);
   }
 
-  if (fg && builtin(r,eof,jobs)){
-    if(dir->in){
-      close(fd0);
-      dup2(input,STDIN_FILENO);
-      close(input);
+    if (fg && builtin(r,eof,jobs)){
+      if(dir->in){
+        close(fd0);
+        dup2(input,STDIN_FILENO);
+        close(input);
+      }
+
+      if(dir->out){
+        close(fd1);
+        dup2(save,STDOUT_FILENO);
+        close(save);
+      }
+
+      fflush(stdout);
+      fflush(stdin);
+      free(io);
+      free(out_file);
+      free(in_file);
+      return;
     }
 
-    if(dir->out){
-      close(fd1);
-      dup2(save,STDOUT_FILENO);
-      close(save);
+    if (!*jobbed) {
+      *jobbed=1;
+      addJobs(jobs,pipeline);
     }
 
-    fflush(stdout);
-    fflush(stdin);
-    free(io);
-    free(out_file);
-    free(in_file);
-    return;
-  }
+    int pid=fork();
+    if (pid==-1)
+      ERROR("fork() failed");
+      
+    if (pid==0){
+      child(r,fg);
+      return;
+    } 
+    // else wait(NULL);
+    if (!fg) //determine background execution wait (&)
+      waitpid(pid, &status, WUNTRACED);
+   int i;
+    for( i=1; i<sizeof(r->argv)-1; i++)
+      {
+          int pd[2];
+          pipe(pd);
 
-  if (!*jobbed) {
-    *jobbed=1;
-    addJobs(jobs,pipeline);
-  }
+          if (!fork()) {
+              dup2(pd[1], 1); // remap output back to parent
+              // execlp(r->argv[i], r->argv[i], NULL);
+              // perror("exec");
+              abort();
+          }
 
-  int pid=fork();
-  if (pid==-1)
-    ERROR("fork() failed");
-     
-  if (pid==0){
-    child(r,fg);
-    return;
-  } 
-  else wait(NULL);
-
+          // remap output from previous child to input
+          dup2(pd[0], 0);
+          close(pd[1]);
+      }
+  
   dup2(input,STDIN_FILENO);
   close(input);
   dup2(save,STDOUT_FILENO);
@@ -211,4 +256,17 @@ extern void freeCommand(Command command) {
 extern void freestateCommand() {
   if (cwd) free(cwd);
   if (owd) free(owd);
+}
+
+extern int checkBG(CommandRep r){
+  int fg = 0;
+  int i = 0;
+  while(r->argv[i] != NULL){
+    if(!strcmp(r->argv[i], "&")){
+      fg = 1;
+      r->argv[i] = NULL;
+    }
+    i++;
+  }
+  return fg;
 }
