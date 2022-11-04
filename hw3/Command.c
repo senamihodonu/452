@@ -142,10 +142,6 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
 			int *jobbed, int *eof, int fg) {
   CommandRep r=command;
 
-  fg = checkBG(r);
-  // printf("%d", fg);
-  
-  
   T_redir dir = r->redir;
   int save =  dup(STDOUT_FILENO);
   int input =  dup(STDIN_FILENO);
@@ -217,27 +213,8 @@ extern void execCommand(Command command, Pipeline pipeline, Jobs jobs,
       child(r,fg);
       return;
     } 
-    // else wait(NULL);
-    if (!fg) //determine background execution wait (&)
-      waitpid(pid, &status, WUNTRACED);
-   int i;
-    for( i=1; i<sizeof(r->argv)-1; i++)
-      {
-          int pd[2];
-          pipe(pd);
+    else wait(NULL);
 
-          if (!fork()) {
-              dup2(pd[1], 1); // remap output back to parent
-              // execlp(r->argv[i], r->argv[i], NULL);
-              // perror("exec");
-              abort();
-          }
-
-          // remap output from previous child to input
-          dup2(pd[0], 0);
-          close(pd[1]);
-      }
-  
   dup2(input,STDIN_FILENO);
   close(input);
   dup2(save,STDOUT_FILENO);
