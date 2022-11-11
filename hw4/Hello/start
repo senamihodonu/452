@@ -1,0 +1,6 @@
+#!/bin/bash
+
+cp ~jbuffenb/classes/452/pub/hw4/fedora.img .
+~jbuffenb/classes/452/pub/bin/hw4boot
+scp -P 2222 -r cp ~jbuffenb/classes/452/pub/hw4/Hello \ cs452@localhost:
+ssh -p 2222 cs452@localhost
